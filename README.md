@@ -236,7 +236,34 @@ cd infra && cdk deploy --profile qta-dev
 
 ---
 
+##Invariants (Enforced by Tests)
 
+1. Every tool in tools.json has mutates =fales and method= GET
+2. NginxMtlsClient rejects any non-GET verb
+3. Local-only tools have qta_endpoint: null
+4. Fan-out wraps per-env errors - one failing env must not fail the whole call
+5. Results capped at max_response_bytes - oversize returns
+   {truncated: true, preview: ..., per_env_size_bytes: ...}
+
+---
+### SNOWBALL Explain-Panel Framework
+
+Every heuristic derived value uses 5 fields
+- WHAT - plain-language meaning
+- HOW - exact computation (tool + filter logic)
+- WHY - Operational impact
+- ACT - concrete next steps
+- SOURCE - data origin
+
+ Example: concern queue-depth: prod2
+
+- WHAT: prod2 queue depth is 12 (jobs waiting)
+- HOW: get_system_health(env="prod2") → workQueue=12, fires when >5
+- WHY: arrival rate > service rate - capcaity issue
+- ACT: Compare with engine-hot/engine-missing; wait or add workers
+- SOURCE: insights.concerns() → queue-depth:prod2
+
+---
 
 
 
