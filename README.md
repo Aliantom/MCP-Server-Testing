@@ -211,10 +211,30 @@ source .venv/bin/activate
 
 uvicorn server.app:app --port 8765 --reload
 QTA_MCP_ALLOW_ANON=1 python -m server.app #testing mode
+```
 
+### Tests 
 
+```bash
+pytest -q              # 286 tests
+pytest tests/integration/ --integration   # requires QTA access
+```
 
+### Lint + types
 
+```bash
+ruff check.
+mypy server/
+```
+
+### Infra
+
+```bash
+cd infra && cdk synth
+cd infra && cdk deploy --profile qta-dev
+```
+
+---
 
 
 
